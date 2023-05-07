@@ -58,7 +58,7 @@
                         </thead>
                         <tbody>
                         <tr th:each="result : ${results}">
-                            <td class="mdl-data-table__cell--non-numeric" th:text="${result.getTestUser()}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${result.getUserName()}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${result.getCodeId()}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${result.getTestTime()}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${result.getUpdateAt()}"></td>

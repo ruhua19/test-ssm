@@ -44,6 +44,7 @@ public class CodeInfoVO implements Serializable {
      */
     private Date updateAt;
 
+    private String userName;
 
     private static final long serialVersionUID = 1L;
 

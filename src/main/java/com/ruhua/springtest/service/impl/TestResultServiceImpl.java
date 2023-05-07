@@ -2,6 +2,8 @@ package com.ruhua.springtest.service.impl;
 
 
 import com.ruhua.springtest.domain.TestResult;
+import com.ruhua.springtest.domain.UserInfo;
+import com.ruhua.springtest.mapper.UserInfoMapper;
 import com.ruhua.springtest.param.TestResultParam;
 import com.ruhua.springtest.service.TestResultService;
 import com.ruhua.springtest.mapper.TestResultMapper;
@@ -22,6 +24,9 @@ public class TestResultServiceImpl
     @Autowired
     TestResultMapper testResultMapper;
 
+    @Autowired
+    UserInfoMapper userInfoMapper;
+
     @Override
     public void addResult(TestResultParam testResultParam) {
         testResultMapper.insertSelective(infoFromParam(testResultParam));
@@ -29,12 +34,22 @@ public class TestResultServiceImpl
 
     @Override
     public TestResult getResultByCodeIdAndTestUser(Integer codeId, Integer testUser) {
-       return testResultMapper.selectByPrimaryKey(codeId);
+        TestResult testResult = testResultMapper.selectByPrimaryKey(codeId);
+
+            UserInfo userInfoById = userInfoMapper.getUserInfoById(testResult.getTestUser());
+        testResult.setUserName(userInfoById.getUsername());
+
+        return testResult;
     }
 
     @Override
     public List<TestResult> getResultByTestUser(Integer testUser) {
-       return testResultMapper.search(testUser);
+        List<TestResult> search = testResultMapper.search(testUser);
+        search.forEach(o1->{
+            UserInfo userInfoById = userInfoMapper.getUserInfoById(o1.getTestUser());
+            o1.setUserName(userInfoById.getUsername());
+        });
+        return search;
     }
 
     @Override

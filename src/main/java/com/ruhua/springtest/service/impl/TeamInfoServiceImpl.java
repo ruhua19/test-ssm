@@ -47,7 +47,10 @@ public class TeamInfoServiceImpl implements TeamInfoService{
         if(teamId==null){
             return null;
         }else {
-            return teamInfoMapper.selectTeam(teamId);
+            TeamInfo teamInfo = teamInfoMapper.selectTeam(teamId);
+            UserInfo userIn = userInfoMapper.getUserInfoById(teamInfo.getOwner());
+            teamInfo.setUserName(userIn.getUsername());
+            return teamInfo;
         }
 
     }

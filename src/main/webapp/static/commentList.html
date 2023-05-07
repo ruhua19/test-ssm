@@ -59,7 +59,11 @@
                                 <tbody class="text-body-1">
                                     <tr th:each="comment : ${comments}">
 
-                                        <td class="mdl-data-table__cell--non-numeric" id="createUser" th:text="${comment.getCreateUser()}"></td>
+                                        <td hidden="hidden" type="hidden" class="mdl-data-table__cell--non-numeric" id="createUser" th:text="${comment.getCreateUser()}"></td>
+
+                                        <td class="mdl-data-table__cell--non-numeric" id="userName"
+                                            th:text="${comment.getUserName()}"
+                                            onclick="window.location.href='/userInfo?id='+document.getElementById('createUser').textContent"></td>
                                         <td class="mdl-data-table__cell--non-numeric" hidden="hidden" id="id" th:text="${comment.getId()}"></td>
                                         <td class="mdl-data-table__cell--non-numeric" th:text="${comment.getContent()}"></td>
                                         <td class="mdl-data-table__cell--non-numeric" id = "codeId" th:text="${comment.getCodeId()}"></td>

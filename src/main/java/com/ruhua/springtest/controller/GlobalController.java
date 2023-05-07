@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -35,6 +36,20 @@ public class GlobalController {
         UserInfo userInfo = (UserInfo)session.getAttribute("userInfo");
         model.addAttribute("userInfo",userInfo);
         return "createCode";
+    }
+
+    @GetMapping("/changeUserInfo")
+    public String changeUserInfo(HttpSession session, Model model){
+        UserInfo userInfo = (UserInfo)session.getAttribute("userInfo");
+        model.addAttribute("userInfo",userInfo);
+        return "changeUserInfo";
+    }
+
+    @GetMapping("/changePassword")
+    public String changePassword(HttpSession session, Model model){
+        UserInfo userInfo = (UserInfo)session.getAttribute("userInfo");
+        model.addAttribute("userInfo",userInfo);
+        return "changePassword";
     }
 
 

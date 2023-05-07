@@ -15,4 +15,13 @@
         id,team_id,code_id,
         create_at
     </sql>
+    <insert id="addCode">
+        insert into team_code_relation (team_id,code_id,create_at) values (#{teamId},#{codeId},#{createAt})
+    </insert>
+    <delete id="removeCode">
+        delete from team_code_relation  where code_id =  #{codeId} and team_id = #{teamId}
+    </delete>
+    <select id="getCodeByTeamId" resultMap="BaseResultMap">
+        select * from team_code_relation where team_id = #{teamId}
+    </select>
 </mapper>

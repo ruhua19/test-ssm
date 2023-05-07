@@ -111,7 +111,7 @@
     <div class="mdl-card mdl-shadow--2dp">
         <div class="mdl-card__supporting-text">
             <tr th:each="comment: ${commentInfoList}">
-                <td class="mdl-data-table__cell--non-numeric" th:text="${comment.getCreateUser()}+':'"></td>
+                <td class="mdl-data-table__cell--non-numeric" th:text="${comment.getUserName()}+':'"></td>
                 <td class="mdl-data-table__cell--non-numeric" th:text="${comment.getContent()}"></td>
                 <td class="mdl-data-table__cell--non-numeric" th:text="'在'+${comment.getCreateAt()}"></td>
                 <br/>

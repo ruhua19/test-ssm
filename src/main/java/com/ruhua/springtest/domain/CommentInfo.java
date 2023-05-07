@@ -45,6 +45,8 @@ public class CommentInfo implements Serializable {
      */
     private Date updateAt;
 
+    private String userName;
+
     private Integer other; //操作者
 
 

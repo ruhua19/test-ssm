@@ -40,5 +40,8 @@
     <select id="getCodeByCodeAndCreateUser" resultMap="BaseResultMap">
         select  * from code_info where create_user = #{createUser} and id = #{id}
     </select>
+    <select id="getCodeByCode" resultMap="BaseResultMap">
+        select  * from code_info where  id = #{id}
+    </select>
 
 </mapper>

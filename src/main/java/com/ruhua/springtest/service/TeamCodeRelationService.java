@@ -1,6 +1,9 @@
 package com.ruhua.springtest.service;
 
+import com.ruhua.springtest.domain.CodeInfo;
 import com.ruhua.springtest.domain.TeamCodeRelation;
+
+import java.util.List;
 
 
 /**
@@ -9,5 +12,11 @@ import com.ruhua.springtest.domain.TeamCodeRelation;
 * @createDate 2023-04-08 16:35:38
 */
 public interface TeamCodeRelationService  {
+
+    List<CodeInfo> getCodeByTeamId(Integer teamId);
+
+    void addCode(Integer codeId,Integer userId);
+
+    void removeCode(Integer codeId,Integer userId);
 
 }

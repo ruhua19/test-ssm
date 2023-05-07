@@ -23,7 +23,7 @@
          values (#{username},#{password},#{email},#{createTime},#{modifyTime})
     </insert>
     <update id="changePassword">
-    update user_info set password = #{newPassword} where id = #{userId}
+    update user_info set password = #{password} where id = #{userId}
     </update>
     <update id="updateUserInfo">
 

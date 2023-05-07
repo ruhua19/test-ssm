@@ -51,6 +51,10 @@
                             <th class="mdl-data-table__cell--non-numeric">Update Time</th>
                             <th class="mdl-data-table__cell--non-numeric">Content</th>
                             <th class="mdl-data-table__cell--non-numeric">Action</th>
+                            <th class="mdl-data-table__cell--non-numeric">分享到团队</th>
+                            <th class="mdl-data-table__cell--non-numeric">从团队中去除</th>
+                            <th class="mdl-data-table__cell--non-numeric">分享到公共</th>
+                            <th class="mdl-data-table__cell--non-numeric">从公共中去除</th>
 
                         </tr>
                         </thead>
@@ -59,8 +63,11 @@
                             <td class="mdl-data-table__cell--non-numeric" id="title" th:text="${code.getTitle()}"
                                 onclick="window.location.href='/getCode?title='+document.getElementById('title').textContent+'&createUser='+document.getElementById('createUser').textContent"></td>
 
-                            <td class="mdl-data-table__cell--non-numeric" id="createUser"
-                                th:text="${code.getCreateUser()}"
+                            <td hidden="hidden" type="hidden" class="mdl-data-table__cell--non-numeric" id="createUser" th:text="${code.getCreateUser()}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" hidden="hidden" id="id" th:text="${code.getId()}"></td>
+
+                            <td class="mdl-data-table__cell--non-numeric" id="userName"
+                                th:text="${code.getUserName()}"
                                 onclick="window.location.href='/userInfo?id='+document.getElementById('createUser').textContent"></td>
 
                             <td class="mdl-data-table__cell--non-numeric" id="createAt" th:text="${code.getCreateAt()}"></td>
@@ -74,6 +81,26 @@
                             <td class="mdl-data-table__cell--non-numeric">
                                 <a onclick="window.location.href='/delCode?title='+document.getElementById('title').textContent+'&createUser='+document.getElementById('createUser').textContent"
                                    class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Delete</a>
+                            </td>
+
+                            <td class="mdl-data-table__cell--non-numeric">
+                                <a onclick="window.location.href='/addCodeFromTeam?codeId='+document.getElementById('id').textContent+'&userId='+document.getElementById('createUser').textContent"
+                                   class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">分享到团队</a>
+                            </td>
+
+                            <td class="mdl-data-table__cell--non-numeric">
+                                <a onclick="window.location.href='/removeCodeFromTeam?codeId='+document.getElementById('id').textContent+'&userId='+document.getElementById('createUser').textContent"
+                                   class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">从团队中去除</a>
+                            </td>
+
+                            <td class="mdl-data-table__cell--non-numeric">
+                                <a onclick="window.location.href='/addCode?codeId='+document.getElementById('id').textContent+'&userId='+document.getElementById('createUser').textContent"
+                                   class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">分享到公共</a>
+                            </td>
+
+                            <td class="mdl-data-table__cell--non-numeric">
+                                <a onclick="window.location.href='/removeCode?codeId='+document.getElementById('id').textContent+'&userId='+document.getElementById('createUser').textContent"
+                                   class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">从公共中去除</a>
                             </td>
                         </tr>
                         </tbody>

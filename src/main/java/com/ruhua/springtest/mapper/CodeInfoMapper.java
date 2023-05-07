@@ -34,6 +34,8 @@ public interface CodeInfoMapper   {
     List<CodeInfo> getCodeByTeamId(@Param("teamId")Integer teamId);
 
     CodeInfo getCodeByCodeAndCreateUser(@Param("id") Integer code,@Param("createUser") Integer createUser);
+
+    CodeInfo getCodeByCode(@Param("id") Integer code);
 }
 
 

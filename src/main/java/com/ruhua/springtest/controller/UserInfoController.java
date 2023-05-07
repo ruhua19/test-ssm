@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Controller
 public class UserInfoController {
@@ -105,13 +106,13 @@ public class UserInfoController {
         Integer userId = userInfoParam.getId();
         // 获取新密码
         String password = userInfoParam.getPassword();
-        String name = userInfoParam.getUsername();
-        if (name == null || name.length() == 0 || password == null || password.length() == 0 || userId == null) {
+
+        if (userInfoParam.getConfirmPassword() == null || userInfoParam.getConfirmPassword().length() == 0 || password == null || password.length() == 0 || userId == null) {
             model.addAttribute("error", "修改密码错误 ");
             return "changePassword";
         }
         UserInfo userInfo = userInfoService.getUserInfoById(userId);
-        if(userInfo.getPassword()!=userInfoParam.getPassword()){
+        if(!Objects.equals(userInfo.getPassword(), userInfoParam.getPassword())){
             model.addAttribute("error", "密码错误 ");
             return "changePassword";
         }
@@ -127,7 +128,7 @@ public class UserInfoController {
 
     // 信息修改功能
     @PostMapping("/changeUserInfo")
-    public String updateInfo(@RequestParam Map<String,Object>user, Model model) {
+    public String updateInfo(@RequestParam Map<String,Object>user, Model model,HttpSession session) {
         UserInfoParam userInfoParam = mapToUserInfoParam(user);
         // 获取当前用户id
         Integer userId = userInfoParam.getId();
@@ -144,6 +145,7 @@ public class UserInfoController {
         userInfoService.updateUserInfo(userId, userInfoParam);
         // 将用户信息存入model中
         model.addAttribute("userInfo", userInfo);
+        session.setAttribute("userInfo",userInfo);
         // 返回个人信息页面
         return "userInfo";
     }
@@ -164,7 +166,11 @@ public UserInfoParam mapToUserInfoParam(Map<String, Object> map) {
     // 从map中取出值放到返回值之中
     userInfoParam.setUsername((String) map.get("username"));
     userInfoParam.setPassword((String) map.get("password"));
-    userInfoParam.setId((Integer) map.get("id"));
+    String id = map.get("id")==null?"":map.get("id").toString();
+    if(id!=null&& !id.equals("")){
+
+        userInfoParam.setId(Integer.valueOf(id));
+    }
     userInfoParam.setEmail((String) map.get("email"));
     userInfoParam.setConfirmPassword((String) map.get("confirmPassword"));
     return userInfoParam;

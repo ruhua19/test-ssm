@@ -29,5 +29,5 @@ public interface CodeInfoService  {
 
     List<CodeInfo> viewCodeByUser(String createUser);
 
-    List<CodeInfo> getCodeByTeamId(Integer teamId);
+
 }

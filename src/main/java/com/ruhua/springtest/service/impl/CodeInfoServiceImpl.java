@@ -2,6 +2,8 @@ package com.ruhua.springtest.service.impl;
 
 
 import com.ruhua.springtest.domain.CodeInfo;
+import com.ruhua.springtest.domain.UserInfo;
+import com.ruhua.springtest.mapper.UserInfoMapper;
 import com.ruhua.springtest.param.CodeInfoParam;
 import com.ruhua.springtest.service.CodeInfoService;
 import com.ruhua.springtest.mapper.CodeInfoMapper;
@@ -22,6 +24,9 @@ public class CodeInfoServiceImpl implements CodeInfoService {
     @Autowired
     CodeInfoMapper codeInfoMapper;
 
+    @Autowired
+    UserInfoMapper userInfoMapper;
+
     @Override
     public boolean checkTitleExist(String title, Integer createUser) {
         CodeInfo codeInfo = codeInfoMapper.checkTitleExist(title, createUser);
@@ -41,6 +46,8 @@ public class CodeInfoServiceImpl implements CodeInfoService {
     public CodeInfoVO viewCodeByTitleAndUser(String title, String createUser) {
         CodeInfo codeInfo = codeInfoMapper.checkTitleExist(title, Integer.parseInt(createUser));
         CodeInfoVO codeInfoVO = InfoToVO(codeInfo);
+        UserInfo userInfoById = userInfoMapper.getUserInfoById(codeInfoVO.getCreateUser());
+        codeInfoVO.setUserName(userInfoById.getUsername());
         return codeInfoVO;
 
     }
@@ -49,13 +56,20 @@ public class CodeInfoServiceImpl implements CodeInfoService {
     public CodeInfoVO getCodeByTitleAndCreateUser(String title, Integer createUser) {
         CodeInfo codeInfo = codeInfoMapper.checkTitleExist(title, createUser);
         CodeInfoVO codeInfoVO = InfoToVO(codeInfo);
+        UserInfo userInfoById = userInfoMapper.getUserInfoById(codeInfoVO.getCreateUser());
+        codeInfoVO.setUserName(userInfoById.getUsername());
         return codeInfoVO;
 
     }
 
     @Override
     public CodeInfo getCodeByCodeAndCreateUser(Integer code, Integer createUser) {
-      return   codeInfoMapper.getCodeByCodeAndCreateUser(code,createUser);
+        CodeInfo codeByCodeAndCreateUser = codeInfoMapper.getCodeByCodeAndCreateUser(code, createUser);
+
+            UserInfo userInfoById = userInfoMapper.getUserInfoById(codeByCodeAndCreateUser.getCreateUser());
+        codeByCodeAndCreateUser.setUserName(userInfoById.getUsername());
+
+        return codeByCodeAndCreateUser;
     }
 
     @Override
@@ -70,10 +84,15 @@ public class CodeInfoServiceImpl implements CodeInfoService {
 
     @Override
     public List<CodeInfo> viewCodeByUser(String createUser) {
-        return codeInfoMapper.viewCodeByUser(createUser);
+        List<CodeInfo> codeInfos = codeInfoMapper.viewCodeByUser(createUser);
+        codeInfos.forEach(o1->{
+            UserInfo userInfoById = userInfoMapper.getUserInfoById(o1.getCreateUser());
+            o1.setUserName(userInfoById.getUsername());
+        });
+        return codeInfos;
     }
 
-    @Override
+
     public List<CodeInfo> getCodeByTeamId(Integer teamId) {
         return codeInfoMapper.getCodeByTeamId(teamId);
     }

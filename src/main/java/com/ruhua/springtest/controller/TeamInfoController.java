@@ -105,18 +105,7 @@ public class TeamInfoController {
         }
         return "teamInfo";
     }
-    @GetMapping("/getCodeFromTeam")
-    String getCodeFromTeam( @RequestParam("teamId") Integer teamId, Model model) {
-        // 判断teamId不为空
-        if (teamId == null) {
-            model.addAttribute("error", "teamId is null");
-            return "error";
-        }
-        // 找到teamId关联的代码 返回一个代码list
-        List<CodeInfo> codeList = codeInfoService.getCodeByTeamId(teamId);
-        model.addAttribute("codes", codeList);
-        return "codeInfoList";
-    }
+
     // 创建一个方法 输入是一个map 输出是一个TeamInfoParam 从map中取出值 放到返回值之中
     public TeamInfoParam createTeamInfoParamFromMap(Map<String, Object> map) {
         TeamInfoParam teamInfoParam = new TeamInfoParam();
