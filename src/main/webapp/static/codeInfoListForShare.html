@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>公共代码</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+</head>
+<style>
+  .container {
+    margin: 0 auto;
+
+  }
+
+
+</style>
+<body>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <span class="mdl-layout-title">公共代码</span>
+      <div class="mdl-layout-spacer"></div>
+      <nav class="mdl-navigation mdl-layout--large-screen-only">
+        <a class="mdl-navigation__link" href="/index">Home</a>
+
+      </nav>
+    </div>
+  </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">公共代码</span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" href="/index">Home</a>
+    </nav>
+  </div>
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">公共代码</h2>
+  </div>
+  <main class="container">
+    <div class="container">
+      <div class="container">
+        <div class="container ">
+          <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+            <thead>
+            <tr>
+              <th class="mdl-data-table__cell--non-numeric">Title</th>
+              <th class="mdl-data-table__cell--non-numeric">CreateUser</th>
+              <th class="mdl-data-table__cell--non-numeric">Create Time</th>
+              <th class="mdl-data-table__cell--non-numeric">Update Time</th>
+              <th class="mdl-data-table__cell--non-numeric">Content</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="code:${codes}">
+              <td class="mdl-data-table__cell--non-numeric" id="title" th:text="${code.getTitle()}"
+                  onclick="window.location.href='/getCode?title='+document.getElementById('title').textContent+'&createUser='+document.getElementById('createUser').textContent"></td>
+
+              <td hidden="hidden" type="hidden" class="mdl-data-table__cell--non-numeric" id="createUser" th:text="${code.getCreateUser()}"></td>
+
+              <td class="mdl-data-table__cell--non-numeric" id="userName"
+                  th:text="${code.getUserName()}"
+                  onclick="window.location.href='/userInfo?id='+document.getElementById('createUser').textContent"></td>
+
+              <td class="mdl-data-table__cell--non-numeric" id="createAt" th:text="${code.getCreateAt()}"></td>
+
+              <td class="mdl-data-table__cell--non-numeric" th:text="${code.getUpdateAt()}"></td>
+
+              <td class="mdl-data-table__cell--non-numeric">
+                <a onclick="window.location.href='/getCode?title='+document.getElementById('title').textContent+'&createUser='+document.getElementById('createUser').textContent"
+                   class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">详情</a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

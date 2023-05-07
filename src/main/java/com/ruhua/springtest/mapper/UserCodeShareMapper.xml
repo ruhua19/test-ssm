@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruhua.springtest.mapper.UserCodeShareMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruhua.springtest.domain.UserCodeShareInfo">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="codeId" column="code_id" jdbcType="INTEGER"/>
+        <result property="isShare" column="is_share" jdbcType="INTEGER"/>
+        <result property="createAt" column="create_at" jdbcType="TIMESTAMP"/>
+        <result property="updateAt" column="update_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="addCode">
+        insert into user_code_share (user_id,code_id,is_share,create_at,update_at) values (#{userId},#{codeId},#{isShare},
+                                                                                           #{createAt},#{updateAt})
+    </insert>
+    <delete id="removeCode">
+        delete from user_code_share  where code_id =  #{codeId}
+    </delete>
+    <select id="getCode" resultMap="BaseResultMap">
+    select * from user_code_share
+    </select>
+
+</mapper>
