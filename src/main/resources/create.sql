@@ -78,3 +78,22 @@ CREATE TABLE user_code_collection_relation (
                                                code_id INT NOT NULL,
                                                create_at DATETIME NOT NULL
 );
+申请表
+CREATE TABLE user_team (
+                           id INT PRIMARY KEY AUTO_INCREMENT,
+                           user_id NT NOT NULL,
+                           team_id NT NOT NULL,
+                           team_owner_id INT NOT NULL,
+                           create_at DATETIME NOT NULL,
+                           update_at DATETIME NOT NULL
+);
+
+代码分享表
+CREATE TABLE code_share (
+                           id INT PRIMARY KEY AUTO_INCREMENT,
+                           user_id NT NOT NULL,
+                           code_id NT NOT NULL,
+                           is_share INT NOT NULL,
+                           create_at DATETIME NOT NULL,
+                           update_at DATETIME NOT NULL
+);

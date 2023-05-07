@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruhua.springtest.mapper.CodeInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruhua.springtest.domain.CodeInfo">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="createUser" column="create_user" jdbcType="INTEGER"/>
+            <result property="createAt" column="create_at" jdbcType="TIMESTAMP"/>
+            <result property="updateAt" column="update_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,title,content,
+        create_user,create_at,update_at
+    </sql>
+    <insert id="addCode">
+        insert into code_info (title,content,create_user,create_at,update_at) values (#{title},#{content},#{createUser},#{createAt},#{updateAt})
+    </insert>
+    <update id="updateCode">
+        update code_info set title = #{title},content = #{content},update_at = #{updateAt} where create_user =  #{createUser}
+        and  id = #{id}
+    </update>
+    <delete id="deleteCodeByTitleAndCreateUser">
+        delete from code_info where create_user = #{createUser} and title = #{title}
+    </delete>
+    <select id="checkTitleExist" resultMap="BaseResultMap">
+        select * from code_info where title = #{title} and create_user = #{createUser}
+    </select>
+
+    <select id="getCodeByTeamId" resultMap="BaseResultMap">
+        select * from code_info where id = #{teamId}
+    </select>
+    <select id="viewCodeByUser" resultMap="BaseResultMap">
+        select  * from code_info where create_user = #{createUser}
+    </select>
+    <select id="getCodeByCodeAndCreateUser" resultMap="BaseResultMap">
+        select  * from code_info where create_user = #{createUser} and id = #{id}
+    </select>
+
+</mapper>

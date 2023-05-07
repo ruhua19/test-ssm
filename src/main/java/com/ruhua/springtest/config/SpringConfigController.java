@@ -1,4 +1,4 @@
-package com.ruhua.springtest.controller;
+package com.ruhua.springtest.config;
 
 
 
@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
+@MapperScan("/mapper")
 public class SpringConfigController {
 
     @Bean

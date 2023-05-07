@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruhua.springtest.mapper.CommentInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruhua.springtest.domain.CommentInfo">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="createUser" column="create_user" jdbcType="INTEGER"/>
+            <result property="codeId" column="code_id" jdbcType="INTEGER"/>
+            <result property="createAt" column="create_at" jdbcType="TIMESTAMP"/>
+            <result property="updateAt" column="update_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,content,create_user,
+        code_id,create_at,update_at
+    </sql>
+    <insert id="insertComment">
+        insert into  comment_info (content,create_user,code_id,create_at,update_at)
+        values (#{content},#{create_user},#{code_id},#{create_at},#{update_at})
+    </insert>
+    <delete id="delComment">
+        delete * from comment_info where  id = #{id}
+    </delete>
+    <select id="search" resultMap="BaseResultMap">
+        select * from comment_info  where content like %#{text}%
+    </select>
+    <select id="getCommentPage" resultMap="BaseResultMap">
+        select * from comment_info  where create_user  =  #{id}
+    </select>
+    <select id="getCommentsForCode" resultMap="BaseResultMap">
+        select * from comment_info  where code_id  =  #{codeId}
+    </select>
+</mapper>

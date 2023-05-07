@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruhua.springtest.mapper.TestResultMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruhua.springtest.domain.TestResult">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="codeId" column="code_id" jdbcType="INTEGER"/>
+            <result property="testUser" column="test_user" jdbcType="INTEGER"/>
+            <result property="testTime" column="test_time" jdbcType="TIMESTAMP"/>
+            <result property="result" column="result" jdbcType="VARCHAR"/>
+            <result property="createAt" column="create_at" jdbcType="TIMESTAMP"/>
+            <result property="updateAt" column="update_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,code_id,test_user,
+        test_time,result,create_at,
+        update_at
+    </sql>
+    <select id="search" resultMap="BaseResultMap">
+        select * from test_result where test_user = #{testUser}
+    </select>
+</mapper>

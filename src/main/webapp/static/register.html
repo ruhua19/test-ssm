@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="zh" xmlns:th="https://www.thymeleaf.org" xmlns:shiro="www.thymeleaf.org/thymeleaf-extras-shiro">
+
+<head>
+    <meta charset="UTF-8">
+    <title>register</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <style>
+        .mdl-js-button{
+            margin-top: 16px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+        .demo-card-wide.mdl-card {
+            width: 512px;
+            margin: 0 auto;
+            margin-top: 80px;
+        }
+
+        .demo-card-wide > .mdl-card__title {
+            color: #fff;
+            height: 176px;
+            background: url(/image/welcome.jpg) center / cover;
+        }
+
+        .demo-card-wide > .mdl-card__menu {
+            color: #fff;
+        }
+
+        .mdl-button--colored {
+            background-color: #ec407a;
+            color: #fff;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .success-message {
+            color: green;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .mdl-card__supporting-text {
+            text-align: center;
+        }
+
+        .mdl-textfield__input {
+            border-bottom-color: #ec407a;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Register form -->
+<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+    <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">Register</h2>
+    </div>
+    <div class="mdl-card__supporting-text">
+        <form method="post" action="/register">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" name="username" id="username">
+                <label class="mdl-textfield__label" for="username">Username</label>
+                <span class="error-message" th:value="${error}"></span>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="password" name="password" id="password">
+                <label class="mdl-textfield__label" for="password">Password</label>
+                <span class="error-message" th:value="${error}"></span>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="password" name="confirmPassword" id="confirmPassword">
+                <label class="mdl-textfield__label" for="confirmPassword">Confirm Password</label>
+                <span class="error-message" th:value="${error}"></span>
+            </div>
+            <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                Register
+            </button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

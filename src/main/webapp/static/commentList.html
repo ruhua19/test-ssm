@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Code Comment</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+</head>
+<style>
+    .container {
+        margin: 0 auto;
+
+    }
+
+
+</style>
+
+<body>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header container">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <span class="mdl-layout-title">My Comment</span>
+            <div class="mdl-layout-spacer"></div>
+            <nav class="mdl-navigation mdl-layout--large-screen-only">
+                <a class="mdl-navigation__link" href="/index">Home</a>
+
+            </nav>
+        </div>
+    </header>
+    <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">Code Comment</span>
+        <nav class="mdl-navigation">
+            <a class="mdl-navigation__link" href="/index">Home</a>
+        </nav>
+    </div>
+    <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">My Comments</h2>
+    </div>
+    <main class="container" style="text-align: center;">
+        <div class="container" style="text-align: center;">
+            <div class="container" style="text-align: center;">
+                <div class="mdl-cell " style="text-align: center;">
+                    <div class="container " style="text-align: center;">
+
+                        <div class="container" style="text-align: center;">
+                            <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp"  >
+                                <thead>
+                                    <tr>
+                                        <th class="mdl-data-table__cell--non-numeric">CreateUser</th>
+                                        <th class="mdl-data-table__cell--non-numeric">Comment</th>
+                                        <th class="mdl-data-table__cell--non-numeric">Code</th>
+                                        <th class="mdl-data-table__cell--non-numeric">Create Time</th>
+                                        <th class="mdl-data-table__cell--non-numeric">view</th>
+                                        <th class="mdl-data-table__cell--non-numeric">删除</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody class="text-body-1">
+                                    <tr th:each="comment : ${comments}">
+
+                                        <td class="mdl-data-table__cell--non-numeric" id="createUser" th:text="${comment.getCreateUser()}"></td>
+                                        <td class="mdl-data-table__cell--non-numeric" hidden="hidden" id="id" th:text="${comment.getId()}"></td>
+                                        <td class="mdl-data-table__cell--non-numeric" th:text="${comment.getContent()}"></td>
+                                        <td class="mdl-data-table__cell--non-numeric" id = "codeId" th:text="${comment.getCodeId()}"></td>
+                                        <td class="mdl-data-table__cell--non-numeric" th:text="${comment.getCreateAt()}"></td>
+                                        <td class="mdl-data-table__cell--non-numeric" >
+                                            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                                           onclick="window.location.href='/CodeAndComment?title='+document.getElementById('codeId').textContent+'&createUser='+document.getElementById('createUser').textContent">
+                                                 View Details</a>
+                                        </td>
+                                        <td class="mdl-data-table__cell--non-numeric" >
+                                            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                                               onclick="window.location.href='/removeComment?id='+document.getElementById('id').textContent">Delete</a>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CodeMirror Demo</title>
+    <link rel="stylesheet" href="/js/codemirror.css">
+    <script src="/js/codemirror.js"></script>
+    <script src="/js/javascript.js"></script>
+    <script src="/js/show-hint.js"></script>
+    <link rel="stylesheet" href="/js/show-hint.css">
+    <link rel="stylesheet" href="/js/idea.css">
+</head>
+<body>
+<textarea id="code"></textarea>
+</body>
+<script>
+    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        mode: "javascript",
+        lineNumbers: true,
+        extraKeys: {"Ctrl-Space": "autocomplete"}
+    });
+
+    CodeMirror.commands.autocomplete = function(cm) {
+        CodeMirror.showHint(cm, CodeMirror.hint.javascript);
+    };
+
+</script>
+</html>
