@@ -29,5 +29,7 @@ public interface CodeInfoService  {
 
     List<CodeInfo> viewCodeByUser(String createUser);
 
+    List<CodeInfo> searchForCode (String text);
+
 
 }

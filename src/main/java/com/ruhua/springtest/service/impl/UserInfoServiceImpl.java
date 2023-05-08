@@ -55,7 +55,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public List<UserInfo> getUserInfo(String text) {
+    public List<UserInfo> searchForUser(String text) {
 
       return  userInfoMapper.getUserInfo(text);
     }

@@ -43,5 +43,8 @@
     <select id="getCodeByCode" resultMap="BaseResultMap">
         select  * from code_info where  id = #{id}
     </select>
+    <select id="searchForCode" resultMap="BaseResultMap">
+        select * from code_info where title like %#{text}% or content like %#{text}%
+    </select>
 
 </mapper>

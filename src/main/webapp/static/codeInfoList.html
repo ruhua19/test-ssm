@@ -48,9 +48,8 @@
                             <th class="mdl-data-table__cell--non-numeric">Title</th>
                             <th class="mdl-data-table__cell--non-numeric">CreateUser</th>
                             <th class="mdl-data-table__cell--non-numeric">Create Time</th>
-                            <th class="mdl-data-table__cell--non-numeric">Update Time</th>
-                            <th class="mdl-data-table__cell--non-numeric">Content</th>
-                            <th class="mdl-data-table__cell--non-numeric">Action</th>
+                            <th class="mdl-data-table__cell--non-numeric">编辑</th>
+                            <th class="mdl-data-table__cell--non-numeric">删除</th>
                             <th class="mdl-data-table__cell--non-numeric">分享到团队</th>
                             <th class="mdl-data-table__cell--non-numeric">从团队中去除</th>
                             <th class="mdl-data-table__cell--non-numeric">分享到公共</th>
@@ -72,7 +71,6 @@
 
                             <td class="mdl-data-table__cell--non-numeric" id="createAt" th:text="${code.getCreateAt()}"></td>
 
-                            <td class="mdl-data-table__cell--non-numeric" th:text="${code.getUpdateAt()}"></td>
 
                             <td class="mdl-data-table__cell--non-numeric">
                                 <a onclick="window.location.href='/getCode?title='+document.getElementById('title').textContent+'&createUser='+document.getElementById('createUser').textContent"
@@ -80,7 +78,7 @@
                             </td>
                             <td class="mdl-data-table__cell--non-numeric">
                                 <a onclick="window.location.href='/delCode?title='+document.getElementById('title').textContent+'&createUser='+document.getElementById('createUser').textContent"
-                                   class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Delete</a>
+                                   class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">删除</a>
                             </td>
 
                             <td class="mdl-data-table__cell--non-numeric">

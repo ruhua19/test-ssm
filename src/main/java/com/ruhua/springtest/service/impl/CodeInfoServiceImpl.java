@@ -7,12 +7,15 @@ import com.ruhua.springtest.mapper.UserInfoMapper;
 import com.ruhua.springtest.param.CodeInfoParam;
 import com.ruhua.springtest.service.CodeInfoService;
 import com.ruhua.springtest.mapper.CodeInfoMapper;
+import com.ruhua.springtest.service.UserCodeShareService;
 import com.ruhua.springtest.vo.CodeInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author 15968
@@ -26,6 +29,9 @@ public class CodeInfoServiceImpl implements CodeInfoService {
 
     @Autowired
     UserInfoMapper userInfoMapper;
+
+    @Autowired
+    UserCodeShareService userCodeShareService;
 
     @Override
     public boolean checkTitleExist(String title, Integer createUser) {
@@ -90,6 +96,18 @@ public class CodeInfoServiceImpl implements CodeInfoService {
             o1.setUserName(userInfoById.getUsername());
         });
         return codeInfos;
+    }
+
+    @Override
+    public List<CodeInfo> searchForCode(String text) {
+        List<CodeInfo> code = userCodeShareService.getCode();
+        List<CodeInfo> collect = code.stream().filter(codeInfo -> codeInfo.getTitle().contains(text)
+                || codeInfo.getContent().contains(text)).collect(Collectors.toList());
+        collect.forEach(o1->{
+            UserInfo userInfoById = userInfoMapper.getUserInfoById(o1.getCreateUser());
+            o1.setUserName(userInfoById.getUsername());
+        });
+        return collect;
     }
 
 

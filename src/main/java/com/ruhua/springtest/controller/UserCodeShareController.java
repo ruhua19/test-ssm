@@ -20,15 +20,13 @@ import java.util.List;
 public class UserCodeShareController {
 
    @Autowired
-    UserCodeShareService userCodeShareService;
+   UserCodeShareService userCodeShareService;
 
    @Autowired
     CodeInfoService codeInfoService;
-    @GetMapping("/getCode")
-    String getCodeFromTeam( Model model) {
+    @GetMapping("/getCodeFromShare")
+    String getCode( Model model) {
         // 判断teamId不为空
-
-
         List<CodeInfo> code = userCodeShareService.getCode();
         model.addAttribute("codes", code);
         return "codeInfoListForShare";

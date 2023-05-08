@@ -25,11 +25,13 @@ public interface UserInfoService {
 
     void updateUserInfo(Integer userId, UserInfoParam userInfoParam);
 
-    List<UserInfo> getUserInfo(String text);
+    List<UserInfo> searchForUser(String text);
 
 
 
     void removeTeamIdByTeamId(Integer id);
 
     void updateTeamFromUser(Integer id, Integer owner);
+
+
 }

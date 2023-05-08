@@ -3,6 +3,8 @@ package com.ruhua.springtest.service;
 import com.ruhua.springtest.domain.TeamInfo;
 import com.ruhua.springtest.param.TeamInfoParam;
 
+import java.util.List;
+
 
 /**
 * @author 15968
@@ -18,4 +20,6 @@ public interface TeamInfoService  {
     void removeTeam(Integer id);
 
     TeamInfo getTeamByUser(Integer userId);
+
+    List<TeamInfo> searchForTeam(String search);
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
 * @author 15968
@@ -53,6 +54,18 @@ public class TeamInfoServiceImpl implements TeamInfoService{
             return teamInfo;
         }
 
+    }
+
+    @Override
+    public List<TeamInfo> searchForTeam(String search) {
+        List<TeamInfo> teamInfos = teamInfoMapper.searchForTeam(search);
+        teamInfos.forEach(
+                teamInfo -> {
+                    UserInfo userIn = userInfoMapper.getUserInfoById(teamInfo.getOwner());
+                    teamInfo.setUserName(userIn.getUsername());
+                }
+        );
+        return teamInfos;
     }
 
     TeamInfo teamInfoFromParam(TeamInfoParam teamInfoParam){

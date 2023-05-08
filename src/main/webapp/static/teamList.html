@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>团队列表</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+</head>
+<style>
+  .container {
+    margin: 0 auto;
+    width: 90%;
+  }
+
+
+</style>
+<body>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <span class="mdl-layout-title">团队列表</span>
+      <div class="mdl-layout-spacer"></div>
+      <nav class="mdl-navigation mdl-layout--large-screen-only">
+        <a class="mdl-navigation__link" href="/index">Home</a>
+        <a class="mdl-navigation__link" href="/forCreateTeam">Create Team</a>
+      </nav>
+    </div>
+  </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">团队列表</span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" href="/index">Home</a>
+      <a class="mdl-navigation__link" href="/forCreateTeam">Create Team</a>
+    </nav>
+  </div>
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">团队列表</h2>
+  </div>
+  <main class="container">
+    <div class="container">
+      <div class="container">
+        <div class="container ">
+          <div class=" ">
+
+            <div class="mdl-card__supporting-text">
+              <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                <thead>
+                <tr>
+                  <th class="mdl-data-table__cell--non-numeric">Team Name</th>
+                  <th class="mdl-data-table__cell--non-numeric">Team Members</th>
+                  <th class="mdl-data-table__cell--non-numeric">Create Time</th>
+                  <th class="mdl-data-table__cell--non-numeric">Update Time</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="team : ${teams}">
+                  <td class="mdl-data-table__cell--non-numeric" th:text="${team.getName()}"></td>
+                  <td class="mdl-data-table__cell--non-numeric" th:text="${team.getOwner()}"></td>
+                  <td class="mdl-data-table__cell--non-numeric" th:text="${team.getCreateAt()}"></td>
+                  <td class="mdl-data-table__cell--non-numeric" th:text="${team.getUpdateAt()}"></td>
+                  <td hidden="hidden" id="teamId" th:text="${team.getId()}"></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

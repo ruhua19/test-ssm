@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.BaseMapper;
 
+import java.util.List;
+
 
 /**
 * @author 15968
@@ -19,6 +21,8 @@ public interface TeamInfoMapper extends BaseMapper<TeamInfo> {
     TeamInfo getTeamInfoByName(@Param("name")String name, @Param("owner")Integer owner);
 
     TeamInfo selectTeam(@Param("teamId") Integer teamId);
+
+    List<TeamInfo> searchForTeam(@Param("text")String search);
 }
 
 

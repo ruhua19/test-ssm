@@ -37,7 +37,7 @@ public class TeamCodeRelationController {
         return "codeInfoListForTeam";
     }
 
-    @GetMapping("/addCodeForTeam")
+    @GetMapping("/addCodeFromTeam")
     String addCode(@RequestParam("codeId") Integer codeId, @RequestParam("userId") Integer userId, Model model, HttpSession session) {
         teamCodeRelationService.addCode(codeId, userId);
         UserInfo userInfo = (UserInfo) session.getAttribute("userInfo");
@@ -55,7 +55,7 @@ public class TeamCodeRelationController {
         return "codeInfoList";
     }
 
-    @GetMapping("/removeCodeFormTeam")
+    @GetMapping("/removeCodeFromTeam")
     String removeCode(@RequestParam("codeId") Integer codeId, @RequestParam("userId") Integer userId, Model model, HttpSession session) {
         teamCodeRelationService.removeCode(codeId, userId);
         UserInfo userInfo = (UserInfo) session.getAttribute("userInfo");

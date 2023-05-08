@@ -36,6 +36,8 @@ public interface CodeInfoMapper   {
     CodeInfo getCodeByCodeAndCreateUser(@Param("id") Integer code,@Param("createUser") Integer createUser);
 
     CodeInfo getCodeByCode(@Param("id") Integer code);
+
+    List<CodeInfo> searchForCode(@Param("text")String text);
 }
 
 
