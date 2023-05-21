@@ -1,6 +1,7 @@
 package com.ruhua.springtest.param;
 
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.util.Date;
  * @TableName test_result
  */
 
+@Builder
 @Data
 public class TestResultParam implements Serializable {
     /**

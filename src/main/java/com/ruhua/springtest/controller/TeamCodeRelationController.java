@@ -41,7 +41,7 @@ public class TeamCodeRelationController {
     String addCode(@RequestParam("codeId") Integer codeId, @RequestParam("userId") Integer userId, Model model, HttpSession session) {
         teamCodeRelationService.addCode(codeId, userId);
         UserInfo userInfo = (UserInfo) session.getAttribute("userInfo");
-        String createUser = userInfo.getUsername();
+        String createUser = String.valueOf(userInfo.getId());
         if (StringUtils.isEmpty(createUser)) {
             model.addAttribute("error", "参数不能为空");
             return "index";
@@ -59,7 +59,7 @@ public class TeamCodeRelationController {
     String removeCode(@RequestParam("codeId") Integer codeId, @RequestParam("userId") Integer userId, Model model, HttpSession session) {
         teamCodeRelationService.removeCode(codeId, userId);
         UserInfo userInfo = (UserInfo) session.getAttribute("userInfo");
-        String createUser = userInfo.getUsername();
+        String createUser = String.valueOf(userInfo.getId());
         if (StringUtils.isEmpty(createUser)) {
             model.addAttribute("error", "参数不能为空");
             return "index";

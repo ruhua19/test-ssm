@@ -73,8 +73,8 @@ public class TeamInfoController {
         return "index";
     }
 
-    @PostMapping("/addUser")
-    String addUser(@RequestParam("userId") Integer userId, @RequestParam("teamId") Integer teamId, Model model) {
+    @GetMapping("/addUser")
+    String addUser(@RequestParam("userId") Integer userId, @RequestParam("teamId") Integer teamId, Model model,HttpSession session) {
         // 根据userId 查询用户
         UserInfo userById = userInfoService.getUserById(userId);
 
@@ -86,11 +86,16 @@ public class TeamInfoController {
         // 往用户中增加teamId 属性
         userById.setTeamId(teamId);
         userInfoService.updateTeamFromUser(teamId,userById.getId());
-        return "teamInfo";
+        UserInfo userInfo = (UserInfo)session.getAttribute("userInfo");
+        model.addAttribute("userInfo",userInfo);
+        String search = session.getAttribute("search").toString();
+        List<TeamInfo> teamInfos = teamInfoService.searchForTeam(search);
+        model.addAttribute("teams",teamInfos);
+        return "teamListForShare";
     }
 
-    @PostMapping("/removeUser")
-    String removeUser(@RequestParam("userId")Integer userId,  @RequestParam("teamId")Integer teamId, Model model) {
+    @GetMapping("/removeUser")
+    String removeUser(@RequestParam("userId")Integer userId,  @RequestParam("teamId")Integer teamId, Model model,HttpSession session) {
         // 根据userId 查询用户
         UserInfo userById = userInfoService.getUserById(userId);
         // 用户判断不为空
@@ -103,6 +108,18 @@ public class TeamInfoController {
             userById.setTeamId(null);
             userInfoService.updateTeamFromUser(null,userById.getId());
         }
+        UserInfo userInfo =(UserInfo) session.getAttribute("userInfo");
+        Integer id =    userInfo.getId();
+        TeamInfo teamInfo = teamInfoService.getTeamByUser(id);
+        ArrayList<TeamInfo> objects = new ArrayList<>();
+        objects.add(teamInfo);
+        model.addAttribute("teams",objects);
+        Integer teamInfoId = teamInfo.getId();
+        List<UserInfo> userInfoByTeamId = userInfoService.getUserInfoByTeamId(teamInfoId);
+        userInfoByTeamId.forEach(userInfo1 -> {
+            userInfo1.setTeamTitle(teamInfoService.getTeamByUser(userInfo1.getId()).getName());
+        });
+        model.addAttribute("users",userInfoByTeamId);
         return "teamInfo";
     }
 
@@ -122,7 +139,7 @@ public class TeamInfoController {
         ArrayList<TeamInfo> objects = new ArrayList<>();
         objects.add(teamInfo);
         model.addAttribute("teams",objects);
-        return "teamInfo";
+        return "teamList";
     }
 }
 

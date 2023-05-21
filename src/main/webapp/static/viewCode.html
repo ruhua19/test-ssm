@@ -3,7 +3,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>createCode</title>
+  <title>查看代码</title>
 </head>
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
@@ -53,12 +53,13 @@
     border: none;
     outline: none;
   }
-  #setTitle:hover {
-    cursor: pointer;
-  }
   #submit:hover {
     cursor: pointer;
   }
+  #test:hover {
+    cursor: pointer;
+  }
+
 
 </style>
 
@@ -66,21 +67,19 @@
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header container">
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
-      <span class="mdl-layout-title">createCode</span>
+      <span class="mdl-layout-title">codeInfo</span>
       <div class="mdl-layout-spacer"></div>
       <nav class="mdl-navigation mdl-layout--large-screen-only">
+        <a class="mdl-navigation__link"  id="title" th:text="'标题:'+${code.getTitle()}" ></a>
         <a class="mdl-navigation__link" href="/index">Home</a>
-        <a class="mdl-navigation__link" id="title" hidden="hidden"></a>
-          <a class="mdl-navigation__link" id="creatUser" hidden="hidden" th:text="${userInfo.getId()}" ></a>
-        <a class="mdl-navigation__link" id="error" hidden="hidden" th:text="${error}" ></a>
-        <a class="mdl-navigation__link" id="setTitle" onclick="onClick()">设置标题</a>
-        <a class="mdl-navigation__link" id ="submit" hidden="hidden" onclick="post()">提交</a>
+
+
 
       </nav>
     </div>
   </header>
   <div class="mdl-layout__drawer">
-    <span class="mdl-layout-title">createCode</span>
+    <span class="mdl-layout-title">codeInfo</span>
     <nav class="mdl-navigation">
       <a class="mdl-navigation__link" href="/index">Home</a>
     </nav>
@@ -88,16 +87,18 @@
 
 
 
-<div class="content">
-  <textarea cols="30" class="lined-textarea" id="contentForCode" rows="30" ></textarea>
-</div>
+  <div class="content">
+    <textarea class="lined-textarea" id="content"   th:text="${code.getContent()}" ></textarea>
+  </div>
 
+  <a id = "creatUser" type="hidden"  hidden="hidden"  th:text="${userInfo.getId()}" />
+  <a id = "error" type="hidden"  hidden="hidden"  th:text="${error}" />
 
 
 </div>
 </body>
 <script>
-  var editor = CodeMirror.fromTextArea(document.getElementById("contentForCode"), {
+  var editor = CodeMirror.fromTextArea(document.getElementById("content"), {
     mode: "text/x-java",
     lineNumbers:true,
     extraKeys: {"Ctrl": "autocomplete"},
@@ -112,59 +113,67 @@
     styleActiveLine: true,
     foldGutter: true,
 
+
   });
-  editor.setSize('1200px', '950px');
-  editor.setValue("\n" +
-          "public class Test {\n" +
-          "\n" +
-          "    public static void main(String[] args) {\n" +
-          "        \n" +
-          "    }\n" +
-          "}");    //给代码框赋值//设置代码框的长宽
+  editor.setSize('1200px', '545px');
+  //给代码框赋值//设置代码框的长宽
   CodeMirror.commands.autocomplete = function(cm) {
     CodeMirror.showHint(cm, CodeMirror.hint.java);
   };
 
-function onClick() {
-
-  var title = prompt("请输入标题：");
-  if(title === ""){
-    alert("标题不允许为空")
-  }else {
-    document.getElementById("title").innerText = title;
-    document.getElementById("setTitle").hidden = true ;
-    document.getElementById("title").hidden = false ;
-    document.getElementById("submit").hidden = false ;
-  }
-}
-  function post() {
+  function onClick() {
     var title = document.getElementById("title").textContent;
-console.log(title)
-     var value = editor.getValue();
-    console.log(value)
+    var content = editor.getValue();
     var creatUser = document.getElementById("creatUser").innerText;
-    console.log(creatUser)
+    console.log(creatUser);
+
+
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/addCode", true);
+    xhr.open("POST", "/modifyCode", true);
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    var data = "title=" + title + "&content=" + value + "&createUser=" + creatUser;
+    var data = "title=" + encodeURIComponent(title) + "&content=" + encodeURIComponent(content) + "&createUser=" + encodeURIComponent(creatUser);
     xhr.send(data);
     xhr.onreadystatechange = function() {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            console.log(this.responseText);
-            alert("添加成功")
+      if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+        console.log(this.responseText);
+        alert("修改成功")
+      }else {
+        var elementById = document.getElementById("error").textContent;
+        if(elementById===""){
+
         }else {
-          var elementById = document.getElementById("error").textContent;
-          if(elementById===""){
 
-          }else {
-
-            alert(elementById)
-          }
+          alert(elementById)
         }
+      }
     }
 
 
+  }
+  function test() {
+    var title = document.getElementById("title").textContent;
+    var content = editor.getValue();
+    var creatUser = document.getElementById("creatUser").innerText;
+    console.log(creatUser);
+
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/testCode", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    var data = "title=" + encodeURIComponent(title) + "&content=" + encodeURIComponent(content) + "&createUser=" + encodeURIComponent(creatUser);
+    xhr.send(data);
+
+    xhr.onreadystatechange = function() {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/getError", true);
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhr.send();
+      xhr.onreadystatechange = function() {
+        document.getElementById("error").innerHTML = this.responseText;
+      }
+
+
+    };
 
   }
 
@@ -172,4 +181,29 @@ console.log(title)
 
 </script>
 
+<script type="text/javascript">
+  // 获取要监测的标签
+  const label = document.getElementById("error");
+
+  // 记录当前值
+  let currentValue = label.textContent;
+
+  // 每隔一秒钟检测一次标签的值
+  setInterval(function() {
+    // 获取最新的值
+    const newValue = label.textContent;
+
+    // 如果当前值与最新值不相同，则弹窗显示最新值
+    if (currentValue !== newValue) {
+      alert(`测试结果：${newValue}`);
+
+      // 更新当前值为最新值
+      currentValue = newValue;
+    }
+  }, 1000);
+
+  // 每隔 5 秒钟检测一次标签值
+
+
+</script>
 </html>

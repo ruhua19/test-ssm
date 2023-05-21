@@ -34,4 +34,5 @@ public interface UserInfoService {
     void updateTeamFromUser(Integer id, Integer owner);
 
 
+    List<UserInfo> getUserInfoByTeamId(Integer teamInfoId);
 }

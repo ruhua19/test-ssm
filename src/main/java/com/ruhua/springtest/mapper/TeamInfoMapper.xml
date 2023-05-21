@@ -23,6 +23,6 @@
         select * from team_info where id = #{teamId}
     </select>
     <select id="searchForTeam" resultMap="BaseResultMap">
-        select * from team_info where name like %#{text}%
+        select * from team_info where name LIKE CONCAT('%', #{text}, '%')
     </select>
 </mapper>

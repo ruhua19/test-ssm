@@ -63,10 +63,10 @@
 
                   <td class="mdl-data-table__cell--non-numeric" id="userName"
                       th:text="${comment.getUserName()}"
-                      onclick="window.location.href='/userInfo?id='+document.getElementById('createUser').textContent"></td>
+                      onclick=getUserInfo(this)></td>
                   <td class="mdl-data-table__cell--non-numeric" hidden="hidden" id="id" th:text="${comment.getId()}"></td>
                   <td class="mdl-data-table__cell--non-numeric" th:text="${comment.getContent()}"></td>
-                  <td class="mdl-data-table__cell--non-numeric" th:text="${comment.getCreateAt()()}"></td>
+                  <td class="mdl-data-table__cell--non-numeric" th:text="${comment.getCreateAt()}"></td>
 
 
 
@@ -83,4 +83,11 @@
   </main>
 </div>
 </body>
+<script>
+  function getUserInfo(button) {
+    const row = button.parentNode;
+    const createUser = row.querySelector('#createUser').textContent;
+    window.location.href = '/userInfo?id=' + createUser;
+  }
+</script>
 </html>

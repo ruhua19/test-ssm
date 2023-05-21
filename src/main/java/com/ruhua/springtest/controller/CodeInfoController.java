@@ -2,13 +2,15 @@ package com.ruhua.springtest.controller;
 
 
 import com.ruhua.springtest.domain.CodeInfo;
+import com.ruhua.springtest.domain.CommentInfo;
 import com.ruhua.springtest.domain.UserInfo;
 import com.ruhua.springtest.param.CodeInfoParam;
-import com.ruhua.springtest.service.CodeInfoService;
+import com.ruhua.springtest.param.TestResultParam;
+import com.ruhua.springtest.service.*;
 
-import com.ruhua.springtest.service.TestResultService;
 import com.ruhua.springtest.vo.CodeInfoVO;
 import lombok.val;
+import org.apache.commons.io.output.WriterOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,11 +22,14 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpSession;
 import javax.tools.*;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -39,6 +44,14 @@ public class CodeInfoController {
     @Autowired
     TestResultService testResultService;
 
+    @Autowired
+    UserCodeShareService userCodeShareService;
+
+    @Autowired
+    TeamCodeRelationService teamCodeRelationService;
+
+    @Autowired
+    CommentInfoService commentInfoService;
 // 增加版本
 
     @PostMapping("/addCode")
@@ -85,23 +98,30 @@ public class CodeInfoController {
             if (StringUtils.isEmpty(codeInfoParam.getCreateUser()) || StringUtils.isEmpty(codeInfoParam.getContent())
                     || StringUtils.isEmpty(codeInfoParam.getTitle())) {
                 model.addAttribute("error", "参数不能为空");
+                session.setAttribute("error","参数不能为空");
                 return "createCode";
             }
             CodeInfoVO codeInfo = codeInfoService.viewCodeByTitleAndUser(codeInfoParam.getTitle(), codeInfoParam.getCreateUser().toString());
             if (codeInfo == null) {
                 model.addAttribute("error", "代码不存在");
+                session.setAttribute("error","参数不能为空");
                 return "codeInfo";
             }
             String match = match(codeInfoParam.getContent());
-            if(match==null){
-                model.addAttribute("error","找不到类名");
+            if (match == null) {
+                model.addAttribute("error", "找不到类名");
+                session.setAttribute("error","找不到类名");
             }
-            String compiler = compiler(codeInfoParam.getContent(), match);
-            if(compiler==null){
-                return "codeInfo";
-            }else {
-                model.addAttribute("error",compiler);
-                return "codeInfo";
+            String compiler = compiler(codeInfoParam.getContent(), match,codeInfo);
+            model.addAttribute("code",codeInfo);
+            model.addAttribute("userInfo",session.getAttribute("userInfo"));
+            if (compiler == null) {
+                return "codeResult";
+            } else {
+                model.addAttribute("error", compiler);
+                session.setAttribute("error",compiler);
+
+                return "codeResult";
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -132,6 +152,7 @@ public class CodeInfoController {
         // 从数据库里根据 title 和 createUser 去查询代码
         model.addAttribute("code", codeInfoService.viewCodeByTitleAndUser(title, createUser));
         return "codeInfo";
+
     }
 
     /**
@@ -141,7 +162,7 @@ public class CodeInfoController {
      * @return 修改结果
      */
     @PostMapping("/modifyCode")
-    public String modifyCode(@RequestParam Map<String, Object> code, Model model) {
+    public String modifyCode(@RequestParam Map<String, Object> code, Model model,HttpSession session) {
         CodeInfoParam codeInfoParam = createCodeInfoParam(code);
         // 判读参数 createUser 和 content不能为空 和 title 不能为空
         if (StringUtils.isEmpty(codeInfoParam.getCreateUser()) || StringUtils.isEmpty(codeInfoParam.getContent()) || StringUtils.isEmpty(codeInfoParam.getTitle())) {
@@ -156,6 +177,8 @@ public class CodeInfoController {
         }
         codeInfoParam.setId(codeInfo.getId());
         codeInfoService.updateCode(codeInfoParam);
+        model.addAttribute("code",codeInfo);
+        model.addAttribute("userInfo",session.getAttribute("userInfo"));
         return "codeInfo";
     }
 
@@ -168,14 +191,31 @@ public class CodeInfoController {
      * @return 删除结果
      */
     @GetMapping("/delCode")
-    public String searchCode(@RequestParam("title") String title, @RequestParam("createUser") String createUser, Model model) {
+    public String searchCode(@RequestParam("title") String title, @RequestParam("createUser") String createUser, Model model,HttpSession session) {
         // 判读参数 createUser  和 title 不能为空
         if (StringUtils.isEmpty(title) || StringUtils.isEmpty(createUser)) {
             model.addAttribute("error", "参数不能为空");
             return "codeInfoList";
         }
         // 删除title的代码
+        CodeInfoVO codeByTitleAndCreateUser = codeInfoService.getCodeByTitleAndCreateUser(title, Integer.parseInt(createUser));
+        teamCodeRelationService.removeCode(codeByTitleAndCreateUser.getId(),codeByTitleAndCreateUser.getCreateUser());
+        testResultService.deleteCodeByCodeIdAndTestUser(codeByTitleAndCreateUser.getId(),Integer.parseInt(createUser));
+        userCodeShareService.removeCode(codeByTitleAndCreateUser.getId(),codeByTitleAndCreateUser.getCreateUser());
+        List<CommentInfo> commentsForCode = commentInfoService.getCommentsForCode(codeByTitleAndCreateUser.getId().toString());
+        commentsForCode.forEach(
+                o1->{commentInfoService.removeComment(o1.getId());}
+        );
         codeInfoService.deleteCodeByTitleAndCreateUser(title, createUser);
+        UserInfo userInfo = (UserInfo) session.getAttribute("userInfo");
+
+
+        // 从数据库里根据 title 和 createUser 去查询代码
+        List<CodeInfo> codeInfos = codeInfoService.viewCodeByUser(createUser);
+        model.addAttribute("codes", codeInfos);
+
+
+        session.setAttribute("codeList", codeInfoService.viewCodeByUser(createUser));
         return "codeInfoList";
     }
 
@@ -190,7 +230,7 @@ public class CodeInfoController {
     public String getCodeList(Model model, HttpSession session) {
         // createUser 不能为空
         UserInfo userInfo = (UserInfo) session.getAttribute("userInfo");
-        String createUser = userInfo.getUsername();
+        String createUser = String.valueOf(userInfo.getId());
         if (StringUtils.isEmpty(createUser)) {
             model.addAttribute("error", "参数不能为空");
             return "index";
@@ -223,8 +263,8 @@ public class CodeInfoController {
     public CodeInfoParam createCodeInfoParam(Map<String, Object> map) {
 
         CodeInfoParam codeInfoParam = new CodeInfoParam();
-        codeInfoParam.setTitle(map.get("title").toString());
-        codeInfoParam.setCreateUser(Integer.parseInt((String) map.get("createUser")));
+        codeInfoParam.setTitle(map.get("title").toString().replace("标题:",""));
+        codeInfoParam.setCreateUser(Integer.parseInt( map.get("createUser").toString()));
         codeInfoParam.setContent(map.get("content").toString());
         return codeInfoParam;
     }
@@ -239,7 +279,7 @@ public class CodeInfoController {
         return null;
     }
 
-    public String    compiler (String javaCode,String className ) throws NoSuchMethodException, IOException, InvocationTargetException, IllegalAccessException {
+    public String compiler(String javaCode, String className, CodeInfoVO codeInfo) throws NoSuchMethodException, IOException, InvocationTargetException, IllegalAccessException {
 
         // 编译Java代码
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -250,24 +290,38 @@ public class CodeInfoController {
         JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
         boolean success = task.call();
 
-// 获取生成的类文件
+         // 获取生成的类文件
         if (success) {
-            byte[] classBytes = Files.readAllBytes(Paths.get(className+".class"));
+            byte[] classBytes = Files.readAllBytes(Paths.get(className + ".class"));
             Class<?> cls = new ClassLoader() {
                 public Class<?> loadClass(byte[] b) {
                     return defineClass(null, b, 0, b.length);
                 }
             }.loadClass(classBytes);
+            PrintStream originalOut = System.out;
+            StringWriter stringWriter = new StringWriter();
+            PrintStream printStream = new PrintStream(new WriterOutputStream(stringWriter), true);
+
+            System.setOut(printStream); // 将标准输出流重定向到printStream对象
+
             Method method = cls.getMethod("main", String[].class);
             method.invoke(null, (Object) null);
-            return  null;
+            System.setOut(originalOut);
+
+            String output = stringWriter.toString(); // 获取标准输出流的所有内容
+
+
+            TestResultParam build = TestResultParam.builder().codeId(codeInfo.getId()).result(output).code(codeInfo.getContent())
+                    .testTime(new Date()).testUser(codeInfo.getCreateUser()).createAt(new Date()).updateAt(new Date()).build();
+            testResultService.addResult(build);
+            return output;
         } else {
             System.out.println("Compilation failed:");
-            String error = "";
+            StringBuilder error = new StringBuilder();
             for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
-                error +=diagnostic.getMessage(null);
+                error.append(diagnostic.getMessage(null));
             }
-            return error;
+            return error.toString();
         }
     }
 

@@ -44,7 +44,7 @@
         select  * from code_info where  id = #{id}
     </select>
     <select id="searchForCode" resultMap="BaseResultMap">
-        select * from code_info where title like %#{text}% or content like %#{text}%
+        select * from code_info where title  LIKE CONCAT('%', #{text}, '%') or content LIKE CONCAT('%', #{text}, '%')
     </select>
 
 </mapper>

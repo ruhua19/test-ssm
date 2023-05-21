@@ -39,6 +39,8 @@ public interface UserInfoMapper  {
     void updateTeamId(@Param("id")Integer id);
 
     void updateTeamIdFromUser(@Param("id")Integer id, @Param("owner")Integer owner);
+
+    List<UserInfo> getUserInfoByTeamId(@Param("teamId") Integer teamInfoId);
 }
 
 

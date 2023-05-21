@@ -63,8 +63,9 @@
                             <td class="mdl-data-table__cell--non-numeric" th:text="${result.getTestTime()}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${result.getUpdateAt()}"></td>
                             <td class="mdl-data-table__cell--non-numeric">
-                                <form th:action="@{/delete}" method="post">
-                                    <input type="hidden" name="id" th:value="${result.id}"/>
+                                <form action="/removeResult" method="post">
+                                    <input type="hidden" name="codeId" id="codeId" th:value="${result.getCodeId()}"/>
+                                    <input type="hidden" name="testUser" id="testUser" th:value="${result.getTestUser()}"/>
                                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
                                             type="submit">Delete
                                     </button>

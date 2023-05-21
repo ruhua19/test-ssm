@@ -22,10 +22,10 @@
         values (#{content},#{create_user},#{code_id},#{create_at},#{update_at})
     </insert>
     <delete id="delComment">
-        delete * from comment_info where  id = #{id}
+        delete  from comment_info where  id = #{id}
     </delete>
     <select id="search" resultMap="BaseResultMap">
-        select * from comment_info  where content like %#{text}%
+        select * from comment_info  where content  LIKE CONCAT('%', #{text}, '%')
     </select>
     <select id="getCommentPage" resultMap="BaseResultMap">
         select * from comment_info  where create_user  =  #{id}

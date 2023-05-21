@@ -19,6 +19,13 @@
         test_time,result,create_at,
         update_at
     </sql>
+    <insert id="addResult">
+        insert into test_result (test_user,result,code_id,test_time,create_at,update_at)
+        values (#{testUser},#{result},#{codeId},#{testTime},#{createTime},#{updateTime})
+    </insert>
+    <delete id="deleteCodeByCodeIdAndTestUser">
+        delete  from test_result where code_id = #{codeId}
+    </delete>
     <select id="search" resultMap="BaseResultMap">
         select * from test_result where test_user = #{testUser}
     </select>

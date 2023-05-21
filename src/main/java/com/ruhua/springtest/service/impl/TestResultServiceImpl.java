@@ -29,7 +29,8 @@ public class TestResultServiceImpl
 
     @Override
     public void addResult(TestResultParam testResultParam) {
-        testResultMapper.insertSelective(infoFromParam(testResultParam));
+        TestResult testResult = infoFromParam(testResultParam);
+        testResultMapper.addResult(testResult.getTestUser(),testResult.getResult(),testResult.getCodeId(),new Date(),new Date(),new Date());
     }
 
     @Override
@@ -54,7 +55,7 @@ public class TestResultServiceImpl
 
     @Override
     public void deleteCodeByCodeIdAndTestUser(Integer codeId, Integer testUser) {
-        testResultMapper.deleteByPrimaryKey(codeId);
+        testResultMapper.deleteCodeByCodeIdAndTestUser(codeId);
 
     }
     TestResult infoFromParam(TestResultParam testResultParam){

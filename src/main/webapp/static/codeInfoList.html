@@ -60,46 +60,44 @@
                         <tbody>
                         <tr th:each="code:${codes}">
                             <td class="mdl-data-table__cell--non-numeric" id="title" th:text="${code.getTitle()}"
-                                onclick="window.location.href='/getCode?title='+document.getElementById('title').textContent+'&createUser='+document.getElementById('createUser').textContent"></td>
+                                onclick="getCodeDetails(this)"></td>
+                        <td hidden="hidden" type="hidden" class="mdl-data-table__cell--non-numeric" id="createUser" th:text="${code.getCreateUser()}"></td>
+                        <td class="mdl-data-table__cell--non-numeric" hidden="hidden" id="id" th:text="${code.getId()}"></td>
 
-                            <td hidden="hidden" type="hidden" class="mdl-data-table__cell--non-numeric" id="createUser" th:text="${code.getCreateUser()}"></td>
-                            <td class="mdl-data-table__cell--non-numeric" hidden="hidden" id="id" th:text="${code.getId()}"></td>
+                        <td class="mdl-data-table__cell--non-numeric" id="userName"
+                            th:text="${code.getUserName()}"
+                            onclick="getUserInfo(this)"></td>
 
-                            <td class="mdl-data-table__cell--non-numeric" id="userName"
-                                th:text="${code.getUserName()}"
-                                onclick="window.location.href='/userInfo?id='+document.getElementById('createUser').textContent"></td>
+                        <td class="mdl-data-table__cell--non-numeric" id="createAt" th:text="${code.getCreateAt()}"></td>
 
-                            <td class="mdl-data-table__cell--non-numeric" id="createAt" th:text="${code.getCreateAt()}"></td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <a onclick="getCodeDetails(this)"
+                               class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">详情</a>
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <a onclick="deleteCode(this)"
+                               class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">删除</a>
+                        </td>
 
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <a onclick="shareCodeWithTeam(this)"
+                               class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">分享到团队</a>
+                        </td>
 
-                            <td class="mdl-data-table__cell--non-numeric">
-                                <a onclick="window.location.href='/getCode?title='+document.getElementById('title').textContent+'&createUser='+document.getElementById('createUser').textContent"
-                                   class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">详情</a>
-                            </td>
-                            <td class="mdl-data-table__cell--non-numeric">
-                                <a onclick="window.location.href='/delCode?title='+document.getElementById('title').textContent+'&createUser='+document.getElementById('createUser').textContent"
-                                   class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">删除</a>
-                            </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <a onclick="removeCodeFromTeam(this)"
+                               class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">从团队中去除</a>
+                        </td>
 
-                            <td class="mdl-data-table__cell--non-numeric">
-                                <a onclick="window.location.href='/addCodeFromTeam?codeId='+document.getElementById('id').textContent+'&userId='+document.getElementById('createUser').textContent"
-                                   class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">分享到团队</a>
-                            </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <a onclick="shareCode(this)"
+                               class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">分享到公共</a>
+                        </td>
 
-                            <td class="mdl-data-table__cell--non-numeric">
-                                <a onclick="window.location.href='/removeCodeFromTeam?codeId='+document.getElementById('id').textContent+'&userId='+document.getElementById('createUser').textContent"
-                                   class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">从团队中去除</a>
-                            </td>
-
-                            <td class="mdl-data-table__cell--non-numeric">
-                                <a onclick="window.location.href='/addCode?codeId='+document.getElementById('id').textContent+'&userId='+document.getElementById('createUser').textContent"
-                                   class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">分享到公共</a>
-                            </td>
-
-                            <td class="mdl-data-table__cell--non-numeric">
-                                <a onclick="window.location.href='/removeCode?codeId='+document.getElementById('id').textContent+'&userId='+document.getElementById('createUser').textContent"
-                                   class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">从公共中去除</a>
-                            </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <a onclick="unshareCode(this)"
+                               class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">从公共中去除</a>
+                        </td>
                         </tr>
                         </tbody>
                     </table>
@@ -109,4 +107,53 @@
     </main>
 </div>
 </body>
+<script>
+    function getCodeDetails(button) {
+        const row = button.parentNode.parentNode;
+        const title = row.querySelector('#title').textContent;
+        const createUser = row.querySelector('#createUser').textContent;
+        window.location.href = '/getCode?title=' + title + '&createUser=' + createUser;
+    }
+
+    function getUserInfo(button) {
+        const row = button.parentNode.parentNode;
+        const createUser = row.querySelector('#createUser').textContent;
+        window.location.href = '/userInfo?id=' + createUser;
+    }
+
+    function deleteCode(button) {
+        const row = button.parentNode.parentNode;
+        const title = row.querySelector('#title').textContent;
+        const createUser = row.querySelector('#createUser').textContent;
+        window.location.href = '/delCode?title=' + title + '&createUser=' + createUser;
+    }
+
+    function shareCodeWithTeam(button) {
+        const row = button.parentNode.parentNode;
+        const id = row.querySelector('#id').textContent;
+        const createUser = row.querySelector('#createUser').textContent;
+        window.location.href = '/addCodeFromTeam?codeId=' + id + '&userId=' + createUser;
+    }
+    function removeCodeFromTeam(button) {
+        const row = button.parentNode.parentNode;
+        const codeId = row.querySelector('#id').textContent;
+        const userId = row.querySelector('#createUser').textContent;
+        window.location.href = '/removeCodeFromTeam?codeId=' + codeId + '&userId=' + userId;
+    }
+    function shareCode(button) {
+        const row = button.parentNode.parentNode;
+        const codeId = row.querySelector('#id').textContent;
+        const userId = row.querySelector('#createUser').textContent;
+        window.location.href = '/addCode?codeId=' + codeId + '&userId=' + userId;
+    }
+
+    function unshareCode(button) {
+        const row = button.parentNode.parentNode;
+        const codeId = row.querySelector('#id').textContent;
+        const userId = row.querySelector('#createUser').textContent;
+        window.location.href = '/removeCode?codeId=' + codeId + '&userId=' + userId;
+    }
+
+
+</script>
 </html>

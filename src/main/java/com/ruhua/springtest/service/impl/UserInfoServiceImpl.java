@@ -25,7 +25,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public UserInfo getUserById(Integer userId) {
-        return null;
+        return userInfoMapper.getUserInfoById(userId);
     }
 
     @Override
@@ -69,6 +69,11 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public void updateTeamFromUser(Integer id, Integer owner) {
         userInfoMapper.updateTeamIdFromUser(id, owner);
+    }
+
+    @Override
+    public List<UserInfo> getUserInfoByTeamId(Integer teamInfoId) {
+       return userInfoMapper.getUserInfoByTeamId(teamInfoId);
     }
 }
 

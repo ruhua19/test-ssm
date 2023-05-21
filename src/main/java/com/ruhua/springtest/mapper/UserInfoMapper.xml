@@ -44,6 +44,9 @@
     </select>
     <select id="getUserInfo" resultMap="BaseResultMap">
 
-select * * from user_info where username = % #{username} %
+select  * from user_info where username LIKE CONCAT('%', #{username}, '%')
+    </select>
+    <select id="getUserInfoByTeamId" resultMap="BaseResultMap">
+        select * from user_info where team_id = #{teamId}
     </select>
 </mapper>

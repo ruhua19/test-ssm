@@ -54,23 +54,20 @@
             <tbody>
             <tr th:each="code:${codes}">
               <td class="mdl-data-table__cell--non-numeric" id="title" th:text="${code.getTitle()}"
-                  onclick="window.location.href='/getCode?title='+document.getElementById('title').textContent+'&createUser='+document.getElementById('createUser').textContent"></td>
-
+                  onclick="window.location.href='/getCode?title='+this.textContent+'&createUser='+this.parentNode.querySelector('#createUser').textContent"></td>
               <td hidden="hidden" type="hidden" class="mdl-data-table__cell--non-numeric" id="createUser" th:text="${code.getCreateUser()}"></td>
-
+              <td hidden="hidden" type="hidden" class="mdl-data-table__cell--non-numeric" id="id" th:text="${code.getId()}"></td>
               <td class="mdl-data-table__cell--non-numeric" id="userName"
                   th:text="${code.getUserName()}"
-                  onclick="window.location.href='/userInfo?id='+document.getElementById('createUser').textContent"></td>
-
+                  onclick="window.location.href='/userInfo?id='+this.parentNode.querySelector('#createUser').textContent"></td>
               <td class="mdl-data-table__cell--non-numeric" id="createAt" th:text="${code.getCreateAt()}"></td>
-
               <td class="mdl-data-table__cell--non-numeric" th:text="${code.getUpdateAt()}"></td>
-
               <td class="mdl-data-table__cell--non-numeric">
-                <a onclick="window.location.href='/getCode?title='+document.getElementById('title').textContent+'&createUser='+document.getElementById('createUser').textContent"
+                <a onclick="window.location.href='/viewCode?title='+this.parentNode.querySelector('#id').textContent+'&createUser='+this.parentNode.querySelector('#createUser').textContent"
                    class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">详情</a>
               </td>
             </tr>
+
             </tbody>
           </table>
         </div>

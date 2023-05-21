@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.BaseMapper;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -18,6 +19,12 @@ import java.util.List;
 public interface TestResultMapper extends BaseMapper<TestResult> {
 
     List<TestResult> search(@Param("testUser")Integer testUser);
+
+
+    void addResult(@Param("testUser")Integer testUser, @Param("result")String result, @Param("codeId")Integer codeId,
+                   @Param("createTime")Date date,@Param("testTime") Date date1,@Param("updateTime") Date date2);
+
+    void deleteCodeByCodeIdAndTestUser( @Param("codeId")Integer codeId);
 }
 
 

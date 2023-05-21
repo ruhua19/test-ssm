@@ -3,7 +3,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>error</title>
+    <title>测试结果</title>
 </head>
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
@@ -67,9 +67,10 @@
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header container">
     <header class="mdl-layout__header">
         <div class="mdl-layout__header-row">
-            <span class="mdl-layout-title">error</span>
+            <span class="mdl-layout-title">codeInfo</span>
             <div class="mdl-layout-spacer"></div>
             <nav class="mdl-navigation mdl-layout--large-screen-only">
+                <a class="mdl-navigation__link"  id="title" th:text="'标题:'+${code.getTitle()}" ></a>
                 <a class="mdl-navigation__link" href="/index">Home</a>
 
 
@@ -78,7 +79,7 @@
         </div>
     </header>
     <div class="mdl-layout__drawer">
-        <span class="mdl-layout-title">error</span>
+        <span class="mdl-layout-title">codeInfo</span>
         <nav class="mdl-navigation">
             <a class="mdl-navigation__link" href="/index">Home</a>
         </nav>
@@ -89,6 +90,8 @@
     <div class="content">
         <textarea class="lined-textarea" id="content"   th:text="${error}" ></textarea>
     </div>
+
+    <a id = "creatUser" type="hidden"  hidden="hidden"  th:text="${userInfo.getId()}" />
 
 
 </div>
@@ -158,41 +161,21 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         var data = "title=" + encodeURIComponent(title) + "&content=" + encodeURIComponent(content) + "&createUser=" + encodeURIComponent(creatUser);
         xhr.send(data);
-
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var result = xhr.responseText;
-                // 将返回结果渲染到当前页面中
-                document.getElementById("result").textContent = result;
-            }
-        };
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                        window.location.href = xhr.responseText;
+                    }
+                };
 
     }
 
-
+    function getUserInfo(button) {
+        const row = button.parentNode;
+        const createUser = row.querySelector('#createUser').textContent;
+        window.location.href = '/userInfo?id=' + createUser;
+    }
 
 </script>
-<script type="text/javascript">
-    let currentValue = null; // 当前值初始化为 null
 
-    function checkTagValue() {
-        var tag = document.getElementById("error"); // 获取标签元素
-        var value = tag.innerText; // 获取标签内容并去除两端的空格
-
-        if (value !== currentValue) { // 当值不等于当前值时弹窗
-            currentValue = value; // 更新当前值
-            alert(`测试结果为:${value}`); // 弹窗提示
-        }
-    }
-
-    // 页面加载完后执行一次检测
-    window.onload = function() {
-        setInterval(checkTagValue, 1000);
-    }
-
-    // 每隔 5 秒钟检测一次标签值
-
-
-</script>
 
 </html>

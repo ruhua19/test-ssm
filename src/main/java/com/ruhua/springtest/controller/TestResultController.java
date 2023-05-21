@@ -51,15 +51,19 @@ public class TestResultController {
         return "resultInfoList";
     }
     @PostMapping("/removeResult")
-    String removeResult(@RequestParam("codeId")Integer codeId,@RequestParam("testUser") Integer testUser, Model model) {
+    String removeResult(@RequestParam("codeId")Integer codeId,@RequestParam("testUser") Integer testUser, Model model,HttpSession session) {
         // 判断 codeId 和 testUser 不为空
         if (codeId == null || testUser == null) {
+
             model.addAttribute("error", "codeId 或 testUser 为空");
             return "resultInfoList ";
         }
         // 如果为空 将错误信息放入到model 之中 并且返回到错误界面
         // 删除数据库中 条件为codeId 和 testUser
         testResultService.deleteCodeByCodeIdAndTestUser(codeId, testUser);
+        // 如果为空 将错误信息放入到model 之中 并且返回到错误界面
+        // 查询数据库返回结果
+        model.addAttribute("results", testResultService.getResultByTestUser(testUser));
         return "resultInfoList";
     }
 
@@ -80,11 +84,10 @@ public class TestResultController {
 
 
 TestResultParam mapToTestResultParam(@RequestBody Map<String, Object> map) {
-    TestResultParam testResultParam = new TestResultParam();
-    // 从map中取出值放到testResultParam之中
-    testResultParam.setCodeId((Integer) map.get("codeId"));
-    testResultParam.setTestUser((Integer) map.get("testUser"));
-    testResultParam.setResult((String) map.get("result"));
+    TestResultParam testResultParam =  TestResultParam.builder().codeId(Integer.parseInt(map.get("codeId").toString()))
+            .testUser(Integer.parseInt(map.get("testUser").toString()))
+            .result((map.get("result").toString())).build();
+
     return testResultParam;
 }
 

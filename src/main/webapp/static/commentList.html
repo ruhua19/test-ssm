@@ -57,28 +57,25 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-body-1">
-                                    <tr th:each="comment : ${comments}">
-
-                                        <td hidden="hidden" type="hidden" class="mdl-data-table__cell--non-numeric" id="createUser" th:text="${comment.getCreateUser()}"></td>
-
-                                        <td class="mdl-data-table__cell--non-numeric" id="userName"
-                                            th:text="${comment.getUserName()}"
-                                            onclick="window.location.href='/userInfo?id='+document.getElementById('createUser').textContent"></td>
-                                        <td class="mdl-data-table__cell--non-numeric" hidden="hidden" id="id" th:text="${comment.getId()}"></td>
-                                        <td class="mdl-data-table__cell--non-numeric" th:text="${comment.getContent()}"></td>
-                                        <td class="mdl-data-table__cell--non-numeric" id = "codeId" th:text="${comment.getCodeId()}"></td>
-                                        <td class="mdl-data-table__cell--non-numeric" th:text="${comment.getCreateAt()}"></td>
-                                        <td class="mdl-data-table__cell--non-numeric" >
-                                            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                                           onclick="window.location.href='/CodeAndComment?title='+document.getElementById('codeId').textContent+'&createUser='+document.getElementById('createUser').textContent">
-                                                 View Details</a>
-                                        </td>
-                                        <td class="mdl-data-table__cell--non-numeric" >
-                                            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                                               onclick="window.location.href='/removeComment?id='+document.getElementById('id').textContent">Delete</a>
-                                        </td>
-
-                                    </tr>
+                                <tr th:each="comment : ${comments}">
+                                    <td hidden="hidden" type="hidden" class="mdl-data-table__cell--non-numeric" id="createUser" th:text="${comment.getCreateUser()}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" id="userName" th:text="${comment.getUserName()}"
+                                        onclick="getUserInfo()"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" hidden="hidden" id="id" th:text="${comment.getId()}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${comment.getContent()}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" id="codeId" th:text="${comment.getCodeId()}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${comment.getCreateAt()}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric">
+                                        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="viewDetails(this)">
+                                            View Details
+                                        </a>
+                                    </td>
+                                    <td class="mdl-data-table__cell--non-numeric">
+                                        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="removeComment(this)">
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -89,4 +86,24 @@
     </main>
 </div>
 </body>
+<script>
+    function getUserInfo(button) {
+        const row = button.parentNode;
+        const createUser = row.querySelector('#createUser').textContent;
+        window.location.href = '/userInfo?id=' + createUser;
+    }
+
+        function viewDetails(button) {
+        const codeId = button.parentNode.parentNode.querySelector('#codeId').textContent;
+        const createUser = button.parentNode.parentNode.querySelector('#createUser').textContent;
+        window.location.href = '/CodeAndComment?title=' + codeId + '&createUser=' + createUser;
+    }
+
+        function removeComment(button) {
+        const id = button.parentNode.parentNode.querySelector('#id').textContent;
+        window.location.href = '/removeComment?id=' + id;
+    }
+
+</script>
+
 </html>

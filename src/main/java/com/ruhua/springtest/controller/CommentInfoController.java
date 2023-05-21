@@ -55,14 +55,22 @@ public class CommentInfoController {
     // 如果为空 将错误信息放入到model 之中 并且返回到错误界面
     // 从数据库删除数据
     @GetMapping("/removeComment")
-    String removeComment(@RequestParam("id") Integer commentId, Model model) {
+    String removeComment(@RequestParam("id") Integer commentId, Model model,HttpSession session) {
 
         if (commentId == null) {
             model.addAttribute("error", "id, createUser, and codeId cannot be empty");
-            return "codeInfoList";
+            return "commentList";
         }
         commentInfoService.removeComment(commentId);
-        return "codeInfoList";
+        UserInfo userInfo = (UserInfo) session.getAttribute("userInfo");
+        Integer id = userInfo.getId();
+        if (id == null) {
+            return "index";
+        }
+        List<CommentInfo> commentPage = commentInfoService.getCommentPage(id);
+        System.out.println(commentPage);
+        model.addAttribute("comments", commentPage);
+        return "commentList";
     }
 
     // 检查text 不为空

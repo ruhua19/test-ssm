@@ -12,11 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -110,10 +109,13 @@ public class GlobalController {
     }
 
     @GetMapping("/searchForTeam")
-    public String searchForTeam(@RequestParam("search") String search,Model model) {
+    public String searchForTeam(@RequestParam("search") String search,Model model,HttpSession session) {
+        UserInfo userInfo = (UserInfo)session.getAttribute("userInfo");
+        model.addAttribute("userInfo",userInfo);
         List<TeamInfo> teamInfos = teamInfoService.searchForTeam(search);
         model.addAttribute("teams",teamInfos);
-        return "teamList";
+        session.setAttribute("search",search);
+        return "teamListForShare";
     }
 
     @GetMapping("/searchForComment")
@@ -121,6 +123,48 @@ public class GlobalController {
         List<CommentInfo> commentInfoList = commentInfoService.search(search);
         model.addAttribute("comments",commentInfoList);
         return "commentListForShare";
+    }
+
+    @ResponseBody
+    @PostMapping("/getError")
+    public String getError(Model model,HttpSession session) {
+
+        Object error = session.getAttribute("error");
+        return error.toString();
+    }
+
+    @GetMapping("/viewCode")
+    public String viewCode(@RequestParam("createUser") Integer createUser, @RequestParam("title") Integer title, HttpSession session, Model model) {
+        // 判读参数 title 和 createUser 不能为空
+        if (StringUtils.isEmpty(title) || StringUtils.isEmpty(createUser)) {
+            model.addAttribute("error", "参数不能为空");
+            return "codeInfoList";
+        }
+        UserInfo userInfo = (UserInfo) session.getAttribute("userInfo");
+        model.addAttribute("userInfo", userInfo);
+        // 从数据库里根据 title 和 createUser 去查询代码
+        CodeInfo codeInfo = codeInfoService.getCodeByCodeAndCreateUser(title, createUser);
+        model.addAttribute("code", codeInfo);
+        List<CommentInfo> commentInfoList = commentInfoService.getCommentsForCode(String.valueOf(codeInfo.getId()));
+        model.addAttribute("commentInfoList", commentInfoList);
+        return "viewCode";
+    }
+
+    @GetMapping("/teamInfo")
+    public String teamInfo( Model model, HttpSession session){
+        UserInfo userInfo =(UserInfo) session.getAttribute("userInfo");
+        Integer id =    userInfo.getId();
+        TeamInfo teamInfo = teamInfoService.getTeamByUser(id);
+        ArrayList<TeamInfo> objects = new ArrayList<>();
+        objects.add(teamInfo);
+        model.addAttribute("teams",objects);
+        Integer teamInfoId = teamInfo.getId();
+        List<UserInfo> userInfoByTeamId = userInfoService.getUserInfoByTeamId(teamInfoId);
+        userInfoByTeamId.forEach(userInfo1 -> {
+            userInfo1.setTeamTitle(teamInfoService.getTeamByUser(userInfo1.getId()).getName());
+        });
+        model.addAttribute("users",userInfoByTeamId);
+        return "teamInfo";
     }
 
 }

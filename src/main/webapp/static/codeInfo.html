@@ -53,6 +53,13 @@
         border: none;
         outline: none;
     }
+    #submit:hover {
+        cursor: pointer;
+    }
+    #test:hover {
+        cursor: pointer;
+    }
+
 
 </style>
 
@@ -63,9 +70,11 @@
             <span class="mdl-layout-title">codeInfo</span>
             <div class="mdl-layout-spacer"></div>
             <nav class="mdl-navigation mdl-layout--large-screen-only">
+                <a class="mdl-navigation__link"  id="title" th:text="'标题:'+${code.getTitle()}" ></a>
                 <a class="mdl-navigation__link" href="/index">Home</a>
-                <a class="mdl-navigation__link" th:text="${code.getTitle()}" ></a>
-                <a class="mdl-navigation__link"  id="submit"onclick="onClick()">编辑提交</a>
+                <a class="mdl-navigation__link"    id="submit" onclick="onClick()">编辑提交</a>
+                <a class="mdl-navigation__link"    id="test" onclick="test()">测试</a>
+
 
             </nav>
         </div>
@@ -83,7 +92,8 @@
         <textarea class="lined-textarea" id="content"   th:text="${code.getContent()}" ></textarea>
     </div>
 
-    <input id = "creatUser" type="hidden"  hidden="hidden"  th:text="${userInfo.getId()}" >
+        <a id = "creatUser" type="hidden"  hidden="hidden"  th:text="${userInfo.getId()}" />
+    <a id = "error" type="hidden"  hidden="hidden"  th:text="${error}" />
 
 
 </div>
@@ -113,17 +123,58 @@
     };
 
     function onClick() {
-        var title = document.getElementById(title).textContent;
-        var content = document.getElementById(content).textContent;
-        var creatUser = document.getElementById(creatUser).textContent;
+        var title = document.getElementById("title").textContent;
+        var content = editor.getValue();
+        var creatUser = document.getElementById("creatUser").innerText;
+        console.log(creatUser);
 
-            alert("已提交");
+
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "/modifyCode", true);
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            var data = "title=" + encodeURIComponent(title) + "&content=" + encodeURIComponent(content) + "&creatUser=" + encodeURIComponent(creatUser);
+            var data = "title=" + encodeURIComponent(title) + "&content=" + encodeURIComponent(content) + "&createUser=" + encodeURIComponent(creatUser);
             xhr.send(data);
+        xhr.onreadystatechange = function() {
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                console.log(this.responseText);
+                alert("修改成功")
+            }else {
+                var elementById = document.getElementById("error").textContent;
+                if(elementById===""){
 
+                }else {
+
+                    alert(elementById)
+                }
+            }
+        }
+
+
+    }
+    function test() {
+        var title = document.getElementById("title").textContent;
+        var content = editor.getValue();
+        var creatUser = document.getElementById("creatUser").innerText;
+        console.log(creatUser);
+
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/testCode", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        var data = "title=" + encodeURIComponent(title) + "&content=" + encodeURIComponent(content) + "&createUser=" + encodeURIComponent(creatUser);
+        xhr.send(data);
+
+        xhr.onreadystatechange = function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/getError", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                document.getElementById("error").innerHTML = this.responseText;
+            }
+
+
+        };
 
     }
 
@@ -131,4 +182,29 @@
 
 </script>
 
+<script type="text/javascript">
+    // 获取要监测的标签
+    const label = document.getElementById("error");
+
+    // 记录当前值
+    let currentValue = label.textContent;
+
+    // 每隔一秒钟检测一次标签的值
+    setInterval(function() {
+        // 获取最新的值
+        const newValue = label.textContent;
+
+        // 如果当前值与最新值不相同，则弹窗显示最新值
+        if (currentValue !== newValue) {
+            alert(`测试结果：${newValue}`);
+
+            // 更新当前值为最新值
+            currentValue = newValue;
+        }
+    }, 1000);
+
+    // 每隔 5 秒钟检测一次标签值
+
+
+</script>
 </html>

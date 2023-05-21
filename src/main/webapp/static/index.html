@@ -7,7 +7,14 @@
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 </head>
+<style>
+    .container {
+        margin: 0 auto;
 
+    }
+
+
+</style>
 
 <body>
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -20,6 +27,7 @@
                 <a class="mdl-navigation__link" href="/getTeam">My Team</a>
                 <a class="mdl-navigation__link" href="/getUserInfo">UserInfo</a>
                 <a class="mdl-navigation__link" href="/getResultList">My Test Result</a>
+                <a class="mdl-navigation__link" href="/teamInfo">团队成员</a>
             </nav>
         </div>
     </header>
@@ -31,18 +39,33 @@
             <a class="mdl-navigation__link" href="/getTeam">My Team</a>
             <a class="mdl-navigation__link" href="/getUserInfo">UserInfo</a>
             <a class="mdl-navigation__link" href="/getResultList">My Test Result</a>
+            <a class="mdl-navigation__link" href="/teamInfo">团队成员</a>
+
 
         </nav>
     </div>
-    <main class="mdl-layout__content">
+    <main class="mdl-layout__content container">
         <div class="page-content">
             <div class="mdl-grid">
                 <div class="mdl-cell mdl-cell--12-col">
-                    <h1>Code</h1>
 
-                    <th:block th:if="${session.userId != null}">
-                        <p>User ID: <span th:text="${session.userId}"></span></p>
-                    </th:block>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="search-input">
+                        <label class="mdl-textfield__label" for="search-input">Search</label>
+                    </div>
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
+                            onclick="window.location.href='/searchForComment?search='+document.getElementById('search-input').value"
+                    >搜索评论</button>
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
+                            onclick="window.location.href='/searchForCode?search='+document.getElementById('search-input').value"
+                    >搜索代码</button>
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
+                            onclick="window.location.href='/searchForTeam?search='+document.getElementById('search-input').value"
+                    >搜索团队</button>
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
+                            onclick="window.location.href='/searchForUser?search='+document.getElementById('search-input').value"
+                    >搜索用户</button>
+
 
                 </div>
             </div>
@@ -50,4 +73,5 @@
     </main>
 </div>
 </body>
+
 </html>

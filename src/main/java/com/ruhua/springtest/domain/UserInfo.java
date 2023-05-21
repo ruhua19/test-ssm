@@ -49,6 +49,8 @@ public class UserInfo implements Serializable {
 
     private String confirmPassword;
 
+    private String teamTitle;
+
 
     private static final long serialVersionUID = 1L;
 
